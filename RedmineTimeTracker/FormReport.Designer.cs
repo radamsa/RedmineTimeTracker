@@ -30,10 +30,10 @@
         {
             this.uiCalendar = new System.Windows.Forms.MonthCalendar();
             this.uiSessionList = new System.Windows.Forms.ListView();
+            this.chdrIssueId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chdrsSessionBegin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chdrSessionEnd = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chdrSessionTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chdrIssueId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // uiCalendar
@@ -41,6 +41,7 @@
             this.uiCalendar.Location = new System.Drawing.Point(12, 18);
             this.uiCalendar.Name = "uiCalendar";
             this.uiCalendar.TabIndex = 0;
+            this.uiCalendar.DateChanged += new System.Windows.Forms.DateRangeEventHandler(this.uiCalendar_DateChanged);
             // 
             // uiSessionList
             // 
@@ -61,6 +62,11 @@
             this.uiSessionList.UseCompatibleStateImageBehavior = false;
             this.uiSessionList.View = System.Windows.Forms.View.Details;
             // 
+            // chdrIssueId
+            // 
+            this.chdrIssueId.Text = "Issue id";
+            this.chdrIssueId.Width = 100;
+            // 
             // chdrsSessionBegin
             // 
             this.chdrsSessionBegin.Text = "Session begin";
@@ -75,11 +81,6 @@
             // 
             this.chdrSessionTime.Text = "Session time";
             this.chdrSessionTime.Width = 150;
-            // 
-            // chdrIssueId
-            // 
-            this.chdrIssueId.Text = "Issue id";
-            this.chdrIssueId.Width = 100;
             // 
             // FormReport
             // 

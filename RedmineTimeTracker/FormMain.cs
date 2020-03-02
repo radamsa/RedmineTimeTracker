@@ -139,7 +139,7 @@ namespace RedmineTimeTracker
             //parameter - get all issues
             var parameters = new NameValueCollection { { RedmineKeys.STATUS_ID, RedmineKeys.ALL } };
 
-            //parameter - fetch issues for a date range
+            //parameter - fetch my issues
             parameters.Add(RedmineKeys.ASSIGNED_TO_ID, "me");
 
             try
