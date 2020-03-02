@@ -1,0 +1,6 @@
+**/bin/
+**/obj/
+**/_ReSharper.Caches/
+**/.vs/
+**/.idea/
+**/packages/
