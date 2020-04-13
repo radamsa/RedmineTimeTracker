@@ -16,6 +16,8 @@ namespace RedmineTimeTracker
 {
     public partial class FormMain : Form
     {
+        private const string SPENT_TIME_FORMAT = @"hh\:mm";
+
         private RedmineManager m_redmineManager;
         private SQLiteConnection m_dbconnection;
 
@@ -77,8 +79,16 @@ namespace RedmineTimeTracker
         {
             m_redmineManager = new RedmineManager(Properties.Settings.Default.URL, Properties.Settings.Default.Login, Properties.Settings.Default.Password);
 
-            UpdateIssues();
-            VisualSetSignedIn(true);
+            try
+            {
+                UpdateIssues();
+                VisualSetSignedIn(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Redmine access error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                VisualSetSignedIn(false);
+            }
         }
 
         private void VisualSetSignedIn(bool isSignedIn)
@@ -101,36 +111,29 @@ namespace RedmineTimeTracker
             uiTaskList.Groups.Clear();
             uiTaskList.Items.Clear();
 
-            try
+            var issues = await GetIssues();
+            if (null == issues)
+                return;
+
+            // Create list view groups from projects
+            var projects = new HashSet<string>(issues.Select(i => i.FixedVersion?.Name ?? string.Empty));
+            var groupsArray = projects.Select(i => new ListViewGroup(i, i)).ToArray();
+            Array.Sort(groupsArray, new ListViewGroupSorter(SortOrder.Ascending));
+            uiTaskList.Groups.AddRange(groupsArray);
+
+            var issuesTotalTimeSpent = GetAllTotal();
+
+            // Add issues to groups
+            foreach (var item in issues)
             {
-                var issues = await GetIssues();
-                if (null == issues)
-                    return;
+                var timeSpent = issuesTotalTimeSpent.ContainsKey(item.Id) ? issuesTotalTimeSpent[item.Id] : new TimeSpan(0);
 
-                // Create list view groups from projects
-                var projects = new HashSet<string>(issues.Select(i => i.FixedVersion?.Name ?? string.Empty));
-                var groupsArray = projects.Select(i => new ListViewGroup(i, i)).ToArray();
-                Array.Sort(groupsArray, new ListViewGroupSorter(SortOrder.Ascending));
-                uiTaskList.Groups.AddRange(groupsArray);
-
-                var issuesTotalTimeSpent = GetAllTotal();
-
-                // Add issues to groups
-                foreach (var item in issues)
+                uiTaskList.Items.Add(new ListViewItem(new string[] { item.Id.ToString(), item.Status.Name, item.Subject, timeSpent.ToString(SPENT_TIME_FORMAT) })
                 {
-                    var timeSpent = issuesTotalTimeSpent.ContainsKey(item.Id) ? issuesTotalTimeSpent[item.Id] : new TimeSpan(0);
-
-                    uiTaskList.Items.Add(new ListViewItem(new string[] { item.Id.ToString(), item.Status.Name, item.Subject, timeSpent.ToString() })
-                    {
-                        Name = item.Id.ToString(),
-                        Tag = item.Id,
-                        Group = uiTaskList.Groups[item.FixedVersion?.Name ?? string.Empty]
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Redmine access error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Name = item.Id.ToString(),
+                    Tag = item.Id,
+                    Group = uiTaskList.Groups[item.FixedVersion?.Name ?? string.Empty]
+                });
             }
         }
 
@@ -189,7 +192,16 @@ namespace RedmineTimeTracker
         }
 
         private void uiUpdateIssues_Click(object sender, EventArgs e)
-            => UpdateIssues();
+        {
+            try
+            {
+                UpdateIssues();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Redmine access error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void uibtnSettings_Click(object sender, EventArgs e)
         {
@@ -229,7 +241,7 @@ namespace RedmineTimeTracker
                 {
                     Interval = 1000
                 };
-                m_activeSessionTimer.Tick += (object sender, EventArgs e) => uiSessionTimer.Text = (m_activeTotal + m_activeSession.Duration).ToString();
+                m_activeSessionTimer.Tick += (object sender, EventArgs e) => uiSessionTimer.Text = (m_activeTotal + m_activeSession.Duration).ToString(@"hh\:mm\:ss");
                 m_activeSessionTimer.Start();
             }
         }
