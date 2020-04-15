@@ -16,7 +16,7 @@ namespace RedmineTimeTracker
 {
     public partial class FormMain : Form
     {
-        private const string SPENT_TIME_FORMAT = @"hh\:mm";
+        private const int TIME_COL_INDEX = 3;
 
         private RedmineManager m_redmineManager;
         private SQLiteConnection m_dbconnection;
@@ -75,6 +75,9 @@ namespace RedmineTimeTracker
             }
         }
 
+        private static string FormatTimeSpent(TimeSpan timeSpent)
+            => (int)timeSpent.TotalHours + timeSpent.ToString(@"\:mm\:ss");
+
         private void uibtnSignIn_Click(object sender, EventArgs e)
         {
             m_redmineManager = new RedmineManager(Properties.Settings.Default.URL, Properties.Settings.Default.Login, Properties.Settings.Default.Password);
@@ -127,13 +130,14 @@ namespace RedmineTimeTracker
             foreach (var item in issues)
             {
                 var timeSpent = issuesTotalTimeSpent.ContainsKey(item.Id) ? issuesTotalTimeSpent[item.Id] : new TimeSpan(0);
-
-                uiTaskList.Items.Add(new ListViewItem(new string[] { item.Id.ToString(), item.Status.Name, item.Subject, timeSpent.ToString(SPENT_TIME_FORMAT) })
+                var subItem = new ListViewItem(new string[] { item.Id.ToString(), item.Status.Name, item.Subject, FormatTimeSpent(timeSpent) })
                 {
                     Name = item.Id.ToString(),
                     Tag = item.Id,
-                    Group = uiTaskList.Groups[item.FixedVersion?.Name ?? string.Empty]
-                });
+                    Group = uiTaskList.Groups[item.FixedVersion?.Name ?? string.Empty],
+                };
+                subItem.SubItems[TIME_COL_INDEX].Tag = timeSpent;
+                uiTaskList.Items.Add(subItem);
             }
         }
 
@@ -234,14 +238,15 @@ namespace RedmineTimeTracker
             if (m_activeIssueId == 0)
             {
                 m_activeIssueId = (int)uiTaskList.SelectedItems[0].Tag;
-                m_activeTotal = TimeSpan.Parse(uiTaskList.SelectedItems[0].SubItems[3].Text);
+                m_activeTotal = (TimeSpan)uiTaskList.SelectedItems[0].SubItems[TIME_COL_INDEX].Tag;
                 m_activeSession = Session.Start();
                 uibtnStartStop.Text = "Stop";
                 m_activeSessionTimer = new Timer
                 {
                     Interval = 1000
                 };
-                m_activeSessionTimer.Tick += (object sender, EventArgs e) => uiSessionTimer.Text = (m_activeTotal + m_activeSession.Duration).ToString(@"hh\:mm\:ss");
+
+                m_activeSessionTimer.Tick += (object sender, EventArgs e) => uiSessionTimer.Text = FormatTimeSpent(m_activeTotal + m_activeSession.Duration);
                 m_activeSessionTimer.Start();
             }
         }
@@ -252,7 +257,9 @@ namespace RedmineTimeTracker
             {
                 m_activeSession.Stop();
                 var lvItem = uiTaskList.Items.Find(m_activeIssueId.ToString(), false);
-                lvItem[0].SubItems[3].Text = (m_activeTotal + m_activeSession.Duration).ToString();
+                var timeSpent = m_activeTotal + m_activeSession.Duration;
+                lvItem[0].SubItems[TIME_COL_INDEX].Text = FormatTimeSpent(timeSpent);
+                lvItem[0].SubItems[TIME_COL_INDEX].Tag = timeSpent;
 
                 using (var cmd = m_dbconnection.CreateCommand())
                 {
