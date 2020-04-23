@@ -99,8 +99,19 @@ namespace RedmineTimeTracker
             uibtnSignIn.Visible = !isSignedIn;
             uibtnUpdateIssues.Visible = isSignedIn;
             uibtnStartStop.Visible = isSignedIn;
-            uiSessionTimer.Visible = isSignedIn;
             uibtnReport.Visible = isSignedIn;
+        }
+
+        private void VisualShowTimers(bool show)
+        {
+            uiRightSeparator1.Visible = show;
+            uiRightSeparator2.Visible = show;
+            uiLabelTimeSpentBegin.Visible = show;
+            uiLabelSessionTimeSpent.Visible = show;
+            uiSessionTimer.Visible = show;
+            uiLabelTotalTimeSpent.Visible = show;
+            uiTotalTimer.Visible = show;
+            uiLabelTimeSpentEnd.Visible = show;
         }
 
         private async void UpdateIssues()
@@ -246,8 +257,13 @@ namespace RedmineTimeTracker
                     Interval = 1000
                 };
 
-                m_activeSessionTimer.Tick += (object sender, EventArgs e) => uiSessionTimer.Text = FormatTimeSpent(m_activeTotal + m_activeSession.Duration);
+                m_activeSessionTimer.Tick += (object sender, EventArgs e) =>
+                {
+                    uiSessionTimer.Text = FormatTimeSpent(m_activeSession.Duration);
+                    uiTotalTimer.Text = FormatTimeSpent(m_activeTotal + m_activeSession.Duration);
+                };
                 m_activeSessionTimer.Start();
+                VisualShowTimers(true);
             }
         }
 
@@ -270,6 +286,7 @@ namespace RedmineTimeTracker
                     cmd.ExecuteNonQuery();
                 }
 
+                VisualShowTimers(true);
                 m_activeSessionTimer.Stop();
                 m_activeSessionTimer = null;
                 uibtnStartStop.Text = "Start";
@@ -282,6 +299,16 @@ namespace RedmineTimeTracker
         {
             var report = new FormReport(GetAllSessions().ToList());
             report.Show(this);
+        }
+
+        private void uiAddTime_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implemented", "Increase time spent", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not implemented", "Decrease time spent", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }
