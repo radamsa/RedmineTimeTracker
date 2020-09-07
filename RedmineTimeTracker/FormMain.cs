@@ -106,12 +106,7 @@ namespace RedmineTimeTracker
         {
             uiRightSeparator1.Visible = show;
             uiRightSeparator2.Visible = show;
-            uiLabelTimeSpentBegin.Visible = show;
-            uiLabelSessionTimeSpent.Visible = show;
-            uiSessionTimer.Visible = show;
-            uiLabelTotalTimeSpent.Visible = show;
-            uiTotalTimer.Visible = show;
-            uiLabelTimeSpentEnd.Visible = show;
+            uiLabelTimeSpent.Visible = show;
         }
 
         private async void UpdateIssues()
@@ -258,10 +253,8 @@ namespace RedmineTimeTracker
                 };
 
                 m_activeSessionTimer.Tick += (object sender, EventArgs e) =>
-                {
-                    uiSessionTimer.Text = FormatTimeSpent(m_activeSession.Duration);
-                    uiTotalTimer.Text = FormatTimeSpent(m_activeTotal + m_activeSession.Duration);
-                };
+                    uiLabelTimeSpent.Text = $"Time spent: {FormatTimeSpent(m_activeTotal + m_activeSession.Duration)}, last session: {FormatTimeSpent(m_activeSession.Duration)}";
+
                 m_activeSessionTimer.Start();
                 VisualShowTimers(true);
             }

@@ -38,21 +38,16 @@
             this.uiStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.uiToolStrip = new System.Windows.Forms.ToolStrip();
             this.uibtnSignIn = new System.Windows.Forms.ToolStripButton();
-            this.uiSessionTimer = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.uibtnUpdateIssues = new System.Windows.Forms.ToolStripButton();
             this.uibtnSettings = new System.Windows.Forms.ToolStripButton();
             this.uibtnReport = new System.Windows.Forms.ToolStripButton();
-            this.uibtnStartStop = new System.Windows.Forms.ToolStripButton();
-            this.uiLabelTotalTimeSpent = new System.Windows.Forms.ToolStripLabel();
-            this.uiLabelSessionTimeSpent = new System.Windows.Forms.ToolStripLabel();
-            this.uiTotalTimer = new System.Windows.Forms.ToolStripLabel();
-            this.uiLabelTimeSpentBegin = new System.Windows.Forms.ToolStripLabel();
+            this.uiLabelTimeSpent = new System.Windows.Forms.ToolStripLabel();
             this.uiRightSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.uiLabelTimeSpentEnd = new System.Windows.Forms.ToolStripLabel();
+            this.uibtnStartStop = new System.Windows.Forms.ToolStripButton();
             this.uiRightSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.uiAddTime = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.uiAddTime = new System.Windows.Forms.ToolStripButton();
             this.uiStatusStrip.SuspendLayout();
             this.uiToolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -119,16 +114,11 @@
             // 
             this.uiToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.uibtnSignIn,
-            this.uiLabelTimeSpentEnd,
-            this.uiTotalTimer,
-            this.uiLabelTotalTimeSpent,
-            this.uiSessionTimer,
             this.toolStripSeparator1,
             this.uibtnUpdateIssues,
             this.uibtnSettings,
             this.uibtnReport,
-            this.uiLabelSessionTimeSpent,
-            this.uiLabelTimeSpentBegin,
+            this.uiLabelTimeSpent,
             this.uiRightSeparator2,
             this.uibtnStartStop,
             this.uiRightSeparator1,
@@ -149,14 +139,6 @@
             this.uibtnSignIn.Size = new System.Drawing.Size(44, 22);
             this.uibtnSignIn.Text = "SignIn";
             this.uibtnSignIn.Click += new System.EventHandler(this.uibtnSignIn_Click);
-            // 
-            // uiSessionTimer
-            // 
-            this.uiSessionTimer.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiSessionTimer.Name = "uiSessionTimer";
-            this.uiSessionTimer.Size = new System.Drawing.Size(49, 22);
-            this.uiSessionTimer.Text = "00:00:00";
-            this.uiSessionTimer.Visible = false;
             // 
             // toolStripSeparator1
             // 
@@ -195,6 +177,21 @@
             this.uibtnReport.Text = "Report";
             this.uibtnReport.Click += new System.EventHandler(this.uibtnReport_Click);
             // 
+            // uiLabelTimeSpent
+            // 
+            this.uiLabelTimeSpent.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.uiLabelTimeSpent.Name = "uiLabelTimeSpent";
+            this.uiLabelTimeSpent.Size = new System.Drawing.Size(226, 22);
+            this.uiLabelTimeSpent.Text = "Time spent: 00:00:00, last session: 00:00:00";
+            this.uiLabelTimeSpent.Visible = false;
+            // 
+            // uiRightSeparator2
+            // 
+            this.uiRightSeparator2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.uiRightSeparator2.Name = "uiRightSeparator2";
+            this.uiRightSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.uiRightSeparator2.Visible = false;
+            // 
             // uibtnStartStop
             // 
             this.uibtnStartStop.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -208,71 +205,12 @@
             this.uibtnStartStop.Visible = false;
             this.uibtnStartStop.Click += new System.EventHandler(this.uiStartStop_Click);
             // 
-            // uiLabelTotalTimeSpent
-            // 
-            this.uiLabelTotalTimeSpent.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiLabelTotalTimeSpent.Name = "uiLabelTotalTimeSpent";
-            this.uiLabelTotalTimeSpent.Size = new System.Drawing.Size(34, 22);
-            this.uiLabelTotalTimeSpent.Text = "total:";
-            this.uiLabelTotalTimeSpent.Visible = false;
-            // 
-            // uiLabelSessionTimeSpent
-            // 
-            this.uiLabelSessionTimeSpent.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiLabelSessionTimeSpent.Name = "uiLabelSessionTimeSpent";
-            this.uiLabelSessionTimeSpent.Size = new System.Drawing.Size(48, 22);
-            this.uiLabelSessionTimeSpent.Text = "session:";
-            this.uiLabelSessionTimeSpent.Visible = false;
-            // 
-            // uiTotalTimer
-            // 
-            this.uiTotalTimer.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiTotalTimer.Name = "uiTotalTimer";
-            this.uiTotalTimer.Size = new System.Drawing.Size(49, 22);
-            this.uiTotalTimer.Text = "00:00:00";
-            this.uiTotalTimer.Visible = false;
-            // 
-            // uiLabelTimeSpentBegin
-            // 
-            this.uiLabelTimeSpentBegin.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiLabelTimeSpentBegin.Name = "uiLabelTimeSpentBegin";
-            this.uiLabelTimeSpentBegin.Size = new System.Drawing.Size(75, 22);
-            this.uiLabelTimeSpentBegin.Text = "Time spend (";
-            this.uiLabelTimeSpentBegin.Visible = false;
-            // 
-            // uiRightSeparator2
-            // 
-            this.uiRightSeparator2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiRightSeparator2.Name = "uiRightSeparator2";
-            this.uiRightSeparator2.Size = new System.Drawing.Size(6, 25);
-            this.uiRightSeparator2.Visible = false;
-            // 
-            // uiLabelTimeSpentEnd
-            // 
-            this.uiLabelTimeSpentEnd.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiLabelTimeSpentEnd.Name = "uiLabelTimeSpentEnd";
-            this.uiLabelTimeSpentEnd.Size = new System.Drawing.Size(11, 22);
-            this.uiLabelTimeSpentEnd.Text = ")";
-            this.uiLabelTimeSpentEnd.Visible = false;
-            // 
             // uiRightSeparator1
             // 
             this.uiRightSeparator1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.uiRightSeparator1.Name = "uiRightSeparator1";
             this.uiRightSeparator1.Size = new System.Drawing.Size(6, 25);
             this.uiRightSeparator1.Visible = false;
-            // 
-            // uiAddTime
-            // 
-            this.uiAddTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.uiAddTime.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.uiAddTime.Image = ((System.Drawing.Image)(resources.GetObject("uiAddTime.Image")));
-            this.uiAddTime.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.uiAddTime.Name = "uiAddTime";
-            this.uiAddTime.Size = new System.Drawing.Size(23, 22);
-            this.uiAddTime.Text = "toolStripButton1";
-            this.uiAddTime.ToolTipText = "Increase time spent";
-            this.uiAddTime.Click += new System.EventHandler(this.uiAddTime_Click);
             // 
             // toolStripButton1
             // 
@@ -285,6 +223,18 @@
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.ToolTipText = "Decrease time spent";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // uiAddTime
+            // 
+            this.uiAddTime.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.uiAddTime.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.uiAddTime.Image = ((System.Drawing.Image)(resources.GetObject("uiAddTime.Image")));
+            this.uiAddTime.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.uiAddTime.Name = "uiAddTime";
+            this.uiAddTime.Size = new System.Drawing.Size(23, 22);
+            this.uiAddTime.Text = "toolStripButton1";
+            this.uiAddTime.ToolTipText = "Increase time spent";
+            this.uiAddTime.Click += new System.EventHandler(this.uiAddTime_Click);
             // 
             // FormMain
             // 
@@ -321,14 +271,9 @@
         private System.Windows.Forms.ToolStripButton uibtnUpdateIssues;
         private System.Windows.Forms.ToolStripButton uibtnSettings;
         private System.Windows.Forms.ToolStripButton uibtnStartStop;
-        private System.Windows.Forms.ToolStripLabel uiSessionTimer;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton uibtnReport;
-        private System.Windows.Forms.ToolStripLabel uiTotalTimer;
-        private System.Windows.Forms.ToolStripLabel uiLabelTotalTimeSpent;
-        private System.Windows.Forms.ToolStripLabel uiLabelSessionTimeSpent;
-        private System.Windows.Forms.ToolStripLabel uiLabelTimeSpentEnd;
-        private System.Windows.Forms.ToolStripLabel uiLabelTimeSpentBegin;
+        private System.Windows.Forms.ToolStripLabel uiLabelTimeSpent;
         private System.Windows.Forms.ToolStripSeparator uiRightSeparator2;
         private System.Windows.Forms.ToolStripSeparator uiRightSeparator1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
